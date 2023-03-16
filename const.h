@@ -1,5 +1,6 @@
 #ifndef __CONST_H__
 #define __CONST_H__
+#include <cmath>
 
 class Constant{
 public:
@@ -13,6 +14,10 @@ public:
     public:
         // robot num
         static const int RbtNum = 4;
+        static const double MaxForwardVelocity = 6;
+        static const double MinForwardVelocity = -2;
+        static const double MaxAngularVelocity = M_PI;
+        static const double MinAngularVelocity = -M_PI;
     };
 
     class Workplace{
