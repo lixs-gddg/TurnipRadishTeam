@@ -37,6 +37,8 @@ public:
 
         void destroy();
 
+        void goingto(int Wp_id);
+
     // private:
         // robot id
         int id;
