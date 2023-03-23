@@ -61,6 +61,7 @@ void Interactor::Robot::buy(){
         return;
     }
     printf("buy %d\n",this->id);
+    Interactor::wrkplc[curWrkplcId].isGlobalOrder=false;
     targetWrkplcId = Interactor::wrkplc[curWrkplcId].orderList.front().toidx;
     Interactor::wrkplc[curWrkplcId].orderList.pop_front();
 }

@@ -77,6 +77,8 @@ public:
 
         bool isOrder = false;
 
+        bool isGlobalOrder =false;
+
         std::list<order> orderList;
 
         void addOrder(const order& o);

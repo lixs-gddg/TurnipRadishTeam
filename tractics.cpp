@@ -113,7 +113,7 @@ void check_wrkplc()
     {
         for(int j=0;j<wrkplcidx[i].size();j++)
         {
-            if(Interactor::wrkplc[wrkplcidx[i][j]].prodState==1)
+            if(Interactor::wrkplc[wrkplcidx[i][j]].prodState==1 && Interactor::wrkplc[wrkplcidx[i][j]].isGlobalOrder==false)
             {
                 if(i<7)
                 {
@@ -131,7 +131,8 @@ void check_wrkplc()
                     ins.fromidx=wrkplcidx[i][j];
                     ins.toidx=find_sell_wrkplc(ins.fromidx);
                     global_list.push_front(ins);
-                } 
+                }
+                Interactor::wrkplc[wrkplcidx[i][j]].isGlobalOrder=true; 
             }
             if(Interactor::wrkplc[wrkplcidx[i][j]].isOrder==true) continue;
             Material_type=Interactor::wrkplc[wrkplcidx[i][j]].MaterialEmpty();
@@ -150,7 +151,7 @@ void check_wrkplc()
     {
         for(int j=0;j<wrkplcidx[i].size();j++)
         {
-            if(Interactor::wrkplc[wrkplcidx[i][j]].prodState==1)
+            if(Interactor::wrkplc[wrkplcidx[i][j]].prodState==1 && Interactor::wrkplc[wrkplcidx[i][j]].isGlobalOrder==false)
             {
                 std::list<order>::iterator it = global_list.begin();
                 while(it!=global_list.end())
@@ -159,6 +160,7 @@ void check_wrkplc()
                     it++;
                 }
                 global_list.insert(it,Interactor::wrkplc[wrkplcidx[i][j]].orderList.front());
+                Interactor::wrkplc[wrkplcidx[i][j]].isGlobalOrder=true;
             }
         }
     }
@@ -201,15 +203,16 @@ void  do_tactics()
     call_robot();
     for(int i=0;i<4;i++)
     {
-        goingto(i,Interactor::rbt[i].targetWrkplcId);
+        goingto(Interactor::rbt[i].id,Interactor::rbt[i].targetWrkplcId);
     }
 }
 
 void sprintorder()
 {
+    fprintf(stderr,"curFrame:%d\n",Interactor::curFrame);
     for(std::list<order>::iterator it=global_list.begin();it!=global_list.end();it++)
     {
-        fprintf(stderr,"order:%d -> %d\n",it->fromidx,it->toidx);
+        fprintf(stderr,"order:%d -> %d type: |%d|-> |%d|\n",it->fromidx,it->toidx,Interactor::wrkplc[it->fromidx].type,Interactor::wrkplc[it->toidx].type);
     }
 }
 
