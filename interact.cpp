@@ -67,10 +67,6 @@ void Interactor::Robot::destroy(){
     printf("destroy %d\n",this->id);
 }
 
-void Interactor::Robot::goingto(int Wp_id){
-    
-}
-
 
 void Interactor::Workplace::addOrder(const order& o){
     orderList.push_back(o);
