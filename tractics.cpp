@@ -21,6 +21,24 @@ bool global_init()
                 wrkplc_distance[i][j]=3000;
         }
     }
+    /*for(int i=1;i<10;i++)
+    {
+        fprintf(stderr,"type:%d index:",i);
+        for(int j=0;j<wrkplcidx[i].size();j++)
+        {
+            fprintf(stderr,"%d ",wrkplcidx[i][j]);
+        }
+        fprintf(stderr,"\n");
+    }
+    fprintf(stderr,"distance:\n");
+    for(int i=0;i<Interactor::curWrkplcNum;i++)
+    {
+        for(int j=0;j<Interactor::curWrkplcNum;j++)
+        {
+            fprintf(stderr,"%6lf ",wrkplc_distance[i][j]);
+        }
+        fprintf(stderr,"\n");
+    }*/
     return true;
 }
 
@@ -42,6 +60,29 @@ int find_useable_wrkplc(int center,int goal_type)
         {
             result=wrkplcidx[goal_type][i];
             min_priorty=temp_priorty;
+        }
+    }
+    return result;
+}
+
+int find_sell_wrkplc(int center)
+{
+    if(wrkplcidx[8].size()+wrkplcidx[9].size()==0) return -2;
+    int result;
+    if(wrkplcidx[8].size()>0) result=wrkplcidx[8][0];
+    else result=wrkplcidx[9][0];
+    double min_dis=wrkplc_distance[center][result];
+    double temp_dis;
+    for(int i=8;i<10;i++)
+    {
+        for(int j=0;j<wrkplcidx[i].size();j++)
+        {
+            temp_dis=wrkplc_distance[center][wrkplcidx[i][j]];
+            if(temp_dis<min_dis)
+            {
+                min_dis=temp_dis;
+                result=wrkplcidx[i][j];
+            }
         }
     }
     return result;
@@ -74,13 +115,23 @@ void check_wrkplc()
         {
             if(Interactor::wrkplc[wrkplcidx[i][j]].prodState==1)
             {
-                std::list<order>::iterator it = global_list.begin();
-                while(it!=global_list.end())
+                if(i<7)
                 {
-                    if(Interactor::wrkplc[it->fromidx].type < Interactor::wrkplc[wrkplcidx[i][j]].type) break;
-                    it++;
+                    std::list<order>::iterator it = global_list.begin();
+                    while(it!=global_list.end())
+                    {
+                        if(Interactor::wrkplc[it->fromidx].type < Interactor::wrkplc[wrkplcidx[i][j]].type) break;
+                        it++;
+                    }
+                    global_list.insert(it,Interactor::wrkplc[wrkplcidx[i][j]].orderList.front());
                 }
-                global_list.insert(it,Interactor::wrkplc[wrkplcidx[i][j]].orderList.front());
+                else
+                {
+                    order ins;
+                    ins.fromidx=wrkplcidx[i][j];
+                    ins.toidx=find_sell_wrkplc(ins.fromidx);
+                    global_list.push_front(ins);
+                } 
             }
             if(Interactor::wrkplc[wrkplcidx[i][j]].isOrder==true) continue;
             Material_type=Interactor::wrkplc[wrkplcidx[i][j]].MaterialEmpty();

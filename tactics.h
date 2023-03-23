@@ -19,6 +19,8 @@ double priorty_cal(double distance,int size);
 
 int find_useable_wrkplc(int center,int goal_type);
 
+int find_sell_wrkplc(int center);
+
 // check if robots are able to do buy or sell;
 void check_robot();
 
