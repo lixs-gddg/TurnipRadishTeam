@@ -32,4 +32,7 @@ void call_robot();
 
 // tactics
 void  do_tactics();
+
+void sprintorder();
+
 #endif

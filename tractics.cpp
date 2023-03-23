@@ -146,6 +146,22 @@ void check_wrkplc()
             Interactor::wrkplc[wrkplcidx[i][j]].isOrder=true;
         }
     }
+    for(int i=3;i>0;i--)
+    {
+        for(int j=0;j<wrkplcidx[i].size();j++)
+        {
+            if(Interactor::wrkplc[wrkplcidx[i][j]].prodState==1)
+            {
+                std::list<order>::iterator it = global_list.begin();
+                while(it!=global_list.end())
+                {
+                    if(Interactor::wrkplc[it->fromidx].type < Interactor::wrkplc[wrkplcidx[i][j]].type) break;
+                    it++;
+                }
+                global_list.insert(it,Interactor::wrkplc[wrkplcidx[i][j]].orderList.front());
+            }
+        }
+    }
     
 }
 
@@ -189,5 +205,11 @@ void  do_tactics()
     }
 }
 
-
+void sprintorder()
+{
+    for(std::list<order>::iterator it=global_list.begin();it!=global_list.end();it++)
+    {
+        fprintf(stderr,"order:%d -> %d\n",it->fromidx,it->toidx);
+    }
+}
 
