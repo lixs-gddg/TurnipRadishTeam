@@ -18,7 +18,7 @@ bool global_init()
             if(Interactor::wrkplc[i].type!=Interactor::wrkplc[j].type)
                 wrkplc_distance[i][j]=cal_distance(Interactor::wrkplc[i].pos,Interactor::wrkplc[j].pos);
             else
-                wrkplc_distance[i][j]=3000;
+                wrkplc_distance[i][j]=100;
         }
     }
     /*for(int i=1;i<10;i++)
@@ -44,12 +44,13 @@ bool global_init()
 
 double priorty_cal(double distance,int size)
 {
+    //0.1 means weight.
     return 0.1*distance+size;
 }
 
 int find_useable_wrkplc(int center,int goal_type)
 {
-    if(wrkplcidx[goal_type].size()==0) return -1;
+    if(wrkplcidx[goal_type].size()==0) return -2;
     int result=wrkplcidx[goal_type][0];
     double min_priorty=priorty_cal(wrkplc_distance[center][result],Interactor::wrkplc[result].orderList.size());
     double temp_priorty;
@@ -92,7 +93,7 @@ void check_robot()
 {
     for(int i=0;i<4;i++)
     {
-        if(Interactor::rbt[i].curWrkplcId==Interactor::rbt[i].targetWrkplcId)
+        if(Interactor::rbt[i].curWrkplcId==Interactor::rbt[i].targetWrkplcId && Interactor::rbt[i].targetWrkplcId>=0)
         {
             if(Interactor::rbt[i].carriedGoodsType==0)
             {
