@@ -183,6 +183,7 @@ void call_robot()
                     Interactor::rbt[i].targetWrkplcId=it->fromidx;
                     global_list.erase(it);
                     flag=false;
+                    break;
                 }
                 it++;
             }
