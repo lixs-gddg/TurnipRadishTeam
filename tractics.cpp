@@ -113,7 +113,7 @@ void check_wrkplc()
     {
         for(int j=0;j<wrkplcidx[i].size();j++)
         {
-            if(Interactor::wrkplc[wrkplcidx[i][j]].prodState==1 && Interactor::wrkplc[wrkplcidx[i][j]].isGlobalOrder==false)
+            if(Interactor::wrkplc[wrkplcidx[i][j]].orderList.size()>0 && Interactor::wrkplc[wrkplcidx[i][j]].prodState==1 && Interactor::wrkplc[wrkplcidx[i][j]].isGlobalOrder==false)
             {
                 if(i<7)
                 {
@@ -151,7 +151,7 @@ void check_wrkplc()
     {
         for(int j=0;j<wrkplcidx[i].size();j++)
         {
-            if(Interactor::wrkplc[wrkplcidx[i][j]].prodState==1 && Interactor::wrkplc[wrkplcidx[i][j]].isGlobalOrder==false)
+            if(Interactor::wrkplc[wrkplcidx[i][j]].orderList.size()>0 && Interactor::wrkplc[wrkplcidx[i][j]].prodState==1 && Interactor::wrkplc[wrkplcidx[i][j]].isGlobalOrder==false)
             {
                 std::list<order>::iterator it = global_list.begin();
                 while(it!=global_list.end())
