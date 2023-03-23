@@ -56,11 +56,12 @@ void Interactor::Robot::rotate(double av){
 }
 
 void Interactor::Robot::buy(){
-    if(curWrkplcId == 0){
+    if(curWrkplcId == -1){
         fprintf(stderr,"robot %d is not in any workplace\n",id);
         return;
     }
     printf("buy %d\n",this->id);
+    if(Interactor::wrkplc[curWrkplcId].orderList.size()<=0) return;
     Interactor::wrkplc[curWrkplcId].isGlobalOrder=false;
     targetWrkplcId = Interactor::wrkplc[curWrkplcId].orderList.front().toidx;
     Interactor::wrkplc[curWrkplcId].orderList.pop_front();

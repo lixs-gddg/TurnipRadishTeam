@@ -123,7 +123,8 @@ void check_wrkplc()
                         if(Interactor::wrkplc[it->fromidx].type < Interactor::wrkplc[wrkplcidx[i][j]].type) break;
                         it++;
                     }
-                    it=global_list.insert(it,Interactor::wrkplc[wrkplcidx[i][j]].orderList.front());
+                    if(it!=global_list.end()) it=global_list.insert(it,Interactor::wrkplc[wrkplcidx[i][j]].orderList.front());
+                    else global_list.push_back(Interactor::wrkplc[wrkplcidx[i][j]].orderList.front());
                 }
                 else
                 {
@@ -159,7 +160,8 @@ void check_wrkplc()
                     if(Interactor::wrkplc[it->fromidx].type < Interactor::wrkplc[wrkplcidx[i][j]].type) break;
                     it++;
                 }
-                it=global_list.insert(it,Interactor::wrkplc[wrkplcidx[i][j]].orderList.front());
+                if(it!=global_list.end()) it=global_list.insert(it,Interactor::wrkplc[wrkplcidx[i][j]].orderList.front());
+                else global_list.push_back(Interactor::wrkplc[wrkplcidx[i][j]].orderList.front());
                 Interactor::wrkplc[wrkplcidx[i][j]].isGlobalOrder=true;
             }
         }
@@ -187,7 +189,7 @@ void call_robot()
             std::list<order>::iterator it=global_list.begin();
             while(it!=global_list.end())
             {
-                if(cal_distance(Interactor::rbt[i].pos,Interactor::wrkplc[it->fromidx].pos)<2)
+                if(cal_distance(Interactor::rbt[i].pos,Interactor::wrkplc[it->fromidx].pos)<100)
                 {
                     Interactor::rbt[i].targetWrkplcId=it->fromidx;
                     it=global_list.erase(it);
@@ -214,6 +216,7 @@ void  do_tactics()
     for(int i=0;i<4;i++)
     {
         goingto(Interactor::rbt[i].id,Interactor::rbt[i].targetWrkplcId);
+        fprintf(stderr,"robot%d to:%d\n",i,Interactor::rbt[i].targetWrkplcId);
     }
 }
 
