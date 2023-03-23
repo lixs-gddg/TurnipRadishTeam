@@ -73,6 +73,7 @@ void Interactor::Robot::buy(){
 
 void Interactor::Robot::sell(){
     printf("sell %d\n",this->id);
+    targetWrkplcId=-2;
 }
 
 void Interactor::Robot::destroy(){

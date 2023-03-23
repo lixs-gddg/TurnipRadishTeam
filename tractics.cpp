@@ -126,6 +126,9 @@ void check_wrkplc()
                     }
                     if(it!=global_list.end()) it=global_list.insert(it,Interactor::wrkplc[wrkplcidx[i][j]].orderList.front());
                     else global_list.push_back(Interactor::wrkplc[wrkplcidx[i][j]].orderList.front());
+                    fprintf(stderr,"add an order %d -> %d\n",
+                    Interactor::wrkplc[wrkplcidx[i][j]].orderList.front().fromidx,
+                    Interactor::wrkplc[wrkplcidx[i][j]].orderList.front().toidx);
                 }
                 else
                 {
@@ -133,6 +136,9 @@ void check_wrkplc()
                     ins.fromidx=wrkplcidx[i][j];
                     ins.toidx=find_sell_wrkplc(ins.fromidx);
                     global_list.push_front(ins);
+                    fprintf(stderr,"add an order %d -> %d\n",
+                    ins.fromidx,
+                    ins.toidx);
                 }
                 Interactor::wrkplc[wrkplcidx[i][j]].isGlobalOrder=true; 
             }
@@ -164,10 +170,13 @@ void check_wrkplc()
                 if(it!=global_list.end()) it=global_list.insert(it,Interactor::wrkplc[wrkplcidx[i][j]].orderList.front());
                 else global_list.push_back(Interactor::wrkplc[wrkplcidx[i][j]].orderList.front());
                 Interactor::wrkplc[wrkplcidx[i][j]].isGlobalOrder=true;
+                fprintf(stderr,"add an order %d -> %d\n",
+                Interactor::wrkplc[wrkplcidx[i][j]].orderList.front().fromidx,
+                Interactor::wrkplc[wrkplcidx[i][j]].orderList.front().toidx);
             }
         }
     }
-    fprintf(stderr,"curFrame:%d\n",Interactor::curFrame);
+    fprintf(stderr,"\n\n\n\ncurFrame:%d\n",Interactor::curFrame);
     for(int i=0;i<Interactor::curWrkplcNum;i++)
     {
         fprintf(stderr,"wrkplc%d size:%ld :",i,Interactor::wrkplc[i].orderList.size());
@@ -181,7 +190,12 @@ void check_wrkplc()
 
 void call_robot()
 {
-    if(global_list.size()==0) return;
+    if(global_list.size()==0) {
+        fprintf(stderr,"empty global list!\n");
+        return;
+    }
+    
+    fprintf(stderr,"calling robot,global list size:%ld\n",global_list.size());
     for(int i=0;i<4;i++)
     {
         if(Interactor::rbt[i].targetWrkplcId==-2)
@@ -197,6 +211,7 @@ void call_robot()
                     flag=false;
                     break;
                 }
+                if(it==global_list.end()) break;
                 it++;
             }
             if(flag)
@@ -205,6 +220,7 @@ void call_robot()
                 Interactor::rbt[i].targetWrkplcId=it->fromidx;
                 it=global_list.erase(it);
             }
+            if(global_list.size()==0) break;
         }
     }
 }
