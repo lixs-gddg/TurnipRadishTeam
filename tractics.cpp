@@ -123,7 +123,7 @@ void check_wrkplc()
                         if(Interactor::wrkplc[it->fromidx].type < Interactor::wrkplc[wrkplcidx[i][j]].type) break;
                         it++;
                     }
-                    global_list.insert(it,Interactor::wrkplc[wrkplcidx[i][j]].orderList.front());
+                    it=global_list.insert(it,Interactor::wrkplc[wrkplcidx[i][j]].orderList.front());
                 }
                 else
                 {
@@ -159,12 +159,21 @@ void check_wrkplc()
                     if(Interactor::wrkplc[it->fromidx].type < Interactor::wrkplc[wrkplcidx[i][j]].type) break;
                     it++;
                 }
-                global_list.insert(it,Interactor::wrkplc[wrkplcidx[i][j]].orderList.front());
+                it=global_list.insert(it,Interactor::wrkplc[wrkplcidx[i][j]].orderList.front());
                 Interactor::wrkplc[wrkplcidx[i][j]].isGlobalOrder=true;
             }
         }
     }
-    
+    fprintf(stderr,"curFrame:%d\n",Interactor::curFrame);
+    for(int i=0;i<Interactor::curWrkplcNum;i++)
+    {
+        fprintf(stderr,"wrkplc%d size:%ld :",i,Interactor::wrkplc[i].orderList.size());
+        for(auto it=Interactor::wrkplc[i].orderList.begin();it!=Interactor::wrkplc[i].orderList.end();it++)
+        {
+            fprintf(stderr,"%d->%d ",it->fromidx,it->toidx);
+        }
+        fprintf(stderr,"\n");
+    }
 }
 
 void call_robot()
@@ -181,7 +190,7 @@ void call_robot()
                 if(cal_distance(Interactor::rbt[i].pos,Interactor::wrkplc[it->fromidx].pos)<2)
                 {
                     Interactor::rbt[i].targetWrkplcId=it->fromidx;
-                    global_list.erase(it);
+                    it=global_list.erase(it);
                     flag=false;
                     break;
                 }
@@ -191,7 +200,7 @@ void call_robot()
             {
                 it=global_list.begin();
                 Interactor::rbt[i].targetWrkplcId=it->fromidx;
-                global_list.erase(it);
+                it=global_list.erase(it);
             }
         }
     }
@@ -210,7 +219,7 @@ void  do_tactics()
 
 void sprintorder()
 {
-    fprintf(stderr,"curFrame:%d\n",Interactor::curFrame);
+    fprintf(stderr,"global_list size:%ld\n",global_list.size());
     for(std::list<order>::iterator it=global_list.begin();it!=global_list.end();it++)
     {
         fprintf(stderr,"order:%d -> %d type: |%d|-> |%d|\n",it->fromidx,it->toidx,Interactor::wrkplc[it->fromidx].type,Interactor::wrkplc[it->toidx].type);
