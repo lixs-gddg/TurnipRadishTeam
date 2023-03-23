@@ -64,10 +64,12 @@ void check_robot()
 
 void check_wrkplc()
 {
+    std::vector<int> Material_type;
     for(int i=7;i>0;i++)
     {
         for(int j=0;j<wrkplcidx[7].size();j++)
         {
+            
         }
     }
 }

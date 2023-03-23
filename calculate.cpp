@@ -9,3 +9,7 @@ double cal_distance(Interactor::Coord a,Interactor::Coord b){
 double cal_angle(double a,double b){
     return fabs(a-b)>M_PI ? 2*M_PI-fabs(a-b):fabs(a-b);
 }
+
+double cal_direction(Interactor::Coord a,Interactor::Coord b){
+    return atan((b.y-a.y)/(b.x-a.x));
+}
