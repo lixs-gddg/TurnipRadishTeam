@@ -1,4 +1,7 @@
 #include"tactics.h"
+#include"interact.h"
+#include"calculate.h"
+#include"goingto.h"
 
 std::vector<std::vector<int>> wrkplcidx;
 std::vector<std::vector<double>> wrkplc_distance;

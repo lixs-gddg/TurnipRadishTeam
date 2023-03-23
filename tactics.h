@@ -1,9 +1,7 @@
 #ifndef __tactics_H__
 #define __tactics_H__
 
-#include"interact.h"
-#include"calculate.h"
-#include"goingto.h"
+// #include"interact.h"
 #include<limits.h>
 #include<cmath>
 #include<algorithm>
