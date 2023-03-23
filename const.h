@@ -1,6 +1,7 @@
 #ifndef __CONST_H__
 #define __CONST_H__
 #include <cmath>
+#include <vector>
 
 class Constant{
 public:
@@ -24,11 +25,15 @@ public:
     public:
         // workplace max num
         static const int MaxWrkplcNum = 50;
+        static std::vector<int> goodsMap;
+
     };
     
     
 
 
 };
+
+std::vector<int> Constant::Workplace::goodsMap = {0,0,0,0,1 << 1 | 1 << 2 , 1 << 1 | 1 << 3,1 << 2 | 1 << 3,1 << 4 | 1 << 5 | 1<< 6,1 << 7,(int)(((unsigned int)~0)-1)};
 
 #endif

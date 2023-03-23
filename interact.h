@@ -37,6 +37,8 @@ public:
 
         void destroy();
 
+        void goingto(int Wp_id);
+
     // private:
         // robot id
         int id;
@@ -71,6 +73,14 @@ public:
         int rawMaterial;
         // product state in 0 or 1
         int prodState;
+
+    
+
+        std::list<order> orderList;
+
+        void addOrder(const order& o);
+
+        std::vector<int> MaterialEmpty();
     };
 
     // current frame sequence

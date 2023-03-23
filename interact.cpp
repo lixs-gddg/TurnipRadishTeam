@@ -2,6 +2,7 @@
 #include <cstring>
 #include <fstream>
 #include "interact.h"
+#include "tactics.h"
 
 // current frame sequence
 int Interactor::curFrame;
@@ -64,4 +65,23 @@ void Interactor::Robot::sell(){
 
 void Interactor::Robot::destroy(){
     printf("destroy %d\n",this->id);
+}
+
+void Interactor::Robot::goingto(int Wp_id){
+    
+}
+
+
+void Interactor::Workplace::addOrder(const order& o){
+    orderList.push_back(o);
+}
+
+std::vector<int> Interactor::Workplace::MaterialEmpty(){
+    int res = Constant::Workplace::goodsMap[type] - rawMaterial;
+    std::vector<int> ans;
+    for(int i = 1;i <= 7;i++){
+        if(res & (1 << i))
+            ans.push_back(i);
+    }
+    return ans;
 }
