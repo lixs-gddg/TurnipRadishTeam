@@ -10,4 +10,7 @@ double cal_angle(double a,double b);
 // a and b refer to two different coordinates.
 // calculate the direction of a->b
 double cal_direction(Interactor::Coord a, Interactor::Coord b);
+// cur refer to current direction, tar refer to target direction
+// return true means ccw,flase means cw
+int judge_rotation_direction(double cur,double tar);
 #endif
