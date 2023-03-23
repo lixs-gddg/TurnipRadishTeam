@@ -65,11 +65,21 @@ void check_robot()
 void check_wrkplc()
 {
     std::vector<int> Material_type;
-    for(int i=7;i>0;i++)
+    for(int i=7;i>3;i++)
     {
-        for(int j=0;j<wrkplcidx[7].size();j++)
+        for(int j=0;j<wrkplcidx[i].size();j++)
         {
-            
+            if(Interactor::wrkplc[wrkplcidx[i][j]].isOrder==true) continue;
+            Material_type=Interactor::wrkplc[wrkplcidx[i][j]].MaterialEmpty();
+            for(int k=0;k<Material_type.size();k++)
+            {
+                int target_idx=find_useable_wrkplc(wrkplcidx[i][j],Material_type[k]);
+                order temp;
+                temp.fromidx=target_idx;
+                temp.toidx=wrkplcidx[i][j];
+                Interactor::wrkplc[target_idx].addOrder(temp);
+            }
+            Interactor::wrkplc[wrkplcidx[i][j]].isOrder=true;
         }
     }
 }
