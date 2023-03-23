@@ -19,16 +19,20 @@ int main() {
     puts("OK");
     fflush(stdout);
     bool flag=true;
-    int plannum=0;
     std::vector<int> goalidx;
     while(Interactor::readFrame()){
         printf("%d\n", Interactor::curFrame);
-        int lineSpeed = 3;
-        double angleSpeed = 1.5;
-        for(int robotId = 0; robotId < 4; robotId++){
-            printf("forward %d %d\n", robotId, lineSpeed);
-            printf("rotate %d %f\n", robotId, angleSpeed);
+        // int lineSpeed = 3;
+        // double angleSpeed = 1.5;
+        // for(int robotId = 0; robotId < 4; robotId++){
+        //     printf("forward %d %d\n", robotId, lineSpeed);
+        //     printf("rotate %d %f\n", robotId, angleSpeed);
+        // }
+        if(flag)
+        {
+            flag=!global_init();
         }
+        do_tactics();
         printf("OK\n");
         fflush(stdout);
     }

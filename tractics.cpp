@@ -2,7 +2,7 @@
 
 std::vector<std::vector<int>> wrkplcidx;
 std::vector<std::vector<double>> wrkplc_distance;
-
+std::list<order> global_list;
 bool global_init()
 {
     wrkplcidx.resize(10);
@@ -65,10 +65,20 @@ void check_robot()
 void check_wrkplc()
 {
     std::vector<int> Material_type;
-    for(int i=7;i>3;i++)
+    for(int i=7;i>3;i--)
     {
         for(int j=0;j<wrkplcidx[i].size();j++)
         {
+            if(Interactor::wrkplc[wrkplcidx[i][j]].prodState==1)
+            {
+                std::list<order>::iterator it = global_list.begin();
+                while(it!=global_list.end())
+                {
+                    if(Interactor::wrkplc[it->fromidx].type < Interactor::wrkplc[wrkplcidx[i][j]].type) break;
+                    it++;
+                }
+                global_list.insert(it,Interactor::wrkplc[wrkplcidx[i][j]].orderList.front());
+            }
             if(Interactor::wrkplc[wrkplcidx[i][j]].isOrder==true) continue;
             Material_type=Interactor::wrkplc[wrkplcidx[i][j]].MaterialEmpty();
             for(int k=0;k<Material_type.size();k++)
@@ -82,8 +92,48 @@ void check_wrkplc()
             Interactor::wrkplc[wrkplcidx[i][j]].isOrder=true;
         }
     }
+    
 }
 
+void call_robot()
+{
+    if(global_list.size()==0) return;
+    for(int i=0;i<4;i++)
+    {
+        if(Interactor::rbt[i].targetWrkplcId==-2)
+        {
+            bool flag=true;
+            std::list<order>::iterator it=global_list.begin();
+            while(it!=global_list.end())
+            {
+                if(cal_distance(Interactor::rbt[i].pos,Interactor::wrkplc[it->fromidx].pos)<2)
+                {
+                    Interactor::rbt[i].targetWrkplcId=it->fromidx;
+                    global_list.erase(it);
+                    flag=false;
+                }
+                it++;
+            }
+            if(flag)
+            {
+                it=global_list.begin();
+                Interactor::rbt[i].targetWrkplcId=it->fromidx;
+                global_list.erase(it);
+            }
+        }
+    }
+}
+
+void  do_tactics()
+{
+    check_robot();
+    check_wrkplc();
+    call_robot();
+    for(int i=0;i<4;i++)
+    {
+        goingto(i,Interactor::rbt[i].targetWrkplcId);
+    }
+}
 
 
 
