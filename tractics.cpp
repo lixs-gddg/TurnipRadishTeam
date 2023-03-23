@@ -1,43 +1,76 @@
 #include"tactics.h"
 
 std::vector<std::vector<int>> wrkplcidx;
+std::vector<std::vector<double>> wrkplc_distance;
 
 bool global_init()
 {
     wrkplcidx.resize(10);
+    wrkplc_distance.resize(Interactor::curWrkplcNum,std::vector<double> (Interactor::curWrkplcNum));
     for(int i=0;i<Interactor::curWrkplcNum;i++)
     {
         wrkplcidx[Interactor::wrkplc[i].type].push_back(i);
+        for(int j=0;j<Interactor::curWrkplcNum;j++)
+        {
+            if(Interactor::wrkplc[i].type!=Interactor::wrkplc[j].type)
+                wrkplc_distance[i][j]=cal_distance(Interactor::wrkplc[i].pos,Interactor::wrkplc[j].pos);
+            else
+                wrkplc_distance[i][j]=3000;
+        }
     }
     return true;
 }
 
-double count_distance(int a,int b)
+double priorty_cal(double distance,int size)
 {
-    double ax=Interactor::wrkplc[a].pos.x;
-    double ay=Interactor::wrkplc[a].pos.y;
-    double bx=Interactor::wrkplc[b].pos.x;
-    double by=Interactor::wrkplc[b].pos.y;
-    return pow(ax-bx,2)+pow(ay-by,2);
+    return 0.1*distance+size;
 }
 
-int find_nearest_index(int center,int goal_type)
+int find_useable_wrkplc(int center,int goal_type)
 {
+    if(wrkplcidx[goal_type].size()==0) return -1;
     int result=wrkplcidx[goal_type][0];
-    //fprintf(stderr,"goaltype:%d result_type:%d\n",goal_type,Interactor::wrkplc[result].type);
-    double mindistance=count_distance(center,wrkplcidx[goal_type][0]);
-    for(int i=1;i<wrkplcidx[goal_type].size();i++)
+    double min_priorty=priorty_cal(wrkplc_distance[center][result],Interactor::wrkplc[result].orderList.size());
+    double temp_priorty;
+    for(int i=0;i<wrkplcidx[goal_type].size();i++)
     {
-        double temp=count_distance(center,wrkplcidx[goal_type][i]);
-        if(temp<mindistance)
+        temp_priorty=priorty_cal(wrkplc_distance[center][wrkplcidx[goal_type][i]],Interactor::wrkplc[wrkplcidx[goal_type][i]].orderList.size());
+        if(temp_priorty<min_priorty)
         {
-            mindistance=temp;
             result=wrkplcidx[goal_type][i];
+            min_priorty=temp_priorty;
         }
     }
     return result;
 }
 
+void check_robot()
+{
+    for(int i=0;i<4;i++)
+    {
+        if(Interactor::rbt[i].curWrkplcId==Interactor::rbt[i].targetWrkplcId)
+        {
+            if(Interactor::rbt[i].carriedGoodsType==0)
+            {
+                Interactor::rbt[i].buy();
+            }
+            else
+            {
+                Interactor::rbt[i].sell();
+            }
+        }
+    }
+}
+
+void check_wrkplc()
+{
+    for(int i=7;i>0;i++)
+    {
+        for(int j=0;j<wrkplcidx[7].size();j++)
+        {
+        }
+    }
+}
 
 
 

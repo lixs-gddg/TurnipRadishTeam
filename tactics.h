@@ -2,6 +2,8 @@
 #define __tactics_H__
 
 #include"interact.h"
+#include"calculate.h"
+#include<limits.h>
 #include<cmath>
 #include<algorithm>
 #include<iostream>
@@ -13,6 +15,8 @@ typedef struct order_t{
 }order;
 
 bool global_init();
-double count_distance(int a,int b);
-int find_nearest_index(int center,int goal_type);
+double priorty_cal(double distance,int size);
+int find_useable_wrkplc(int center,int goal_type);
+void check_robot();
+void check_wrkplc();
 #endif

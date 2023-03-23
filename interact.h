@@ -2,7 +2,9 @@
 #define __INTERACT_H__
 
 #include "const.h"
+#include "tactics.h"
 #include <vector>
+#include <list>
 
 class Interactor{
 public:
@@ -58,6 +60,8 @@ public:
         double TVC;
         // Collision Value Coefficient
         double CVC;
+        // target workplace
+        int targetWrkplcId = -2;
     };
 
     class Workplace{
@@ -74,7 +78,7 @@ public:
         // product state in 0 or 1
         int prodState;
 
-    
+        bool isOrder = false;
 
         std::list<order> orderList;
 
