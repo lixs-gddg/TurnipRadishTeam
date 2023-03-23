@@ -3,6 +3,7 @@
 #include "interact.h"
 #define PI M_PI
 void goingto(int robotId,int workplaceId){
+    if(workplaceId<0||workplaceId>Interactor::curWrkplcNum||robotId<0||robotId>3) return;
     double direction=cal_direction(Interactor::rbt[robotId].pos,Interactor::wrkplc[workplaceId].pos);
     double angle=cal_angle(direction,Interactor::rbt[robotId].direction);
     double distance=cal_distance(Interactor::rbt[robotId].pos,Interactor::wrkplc[workplaceId].pos);
