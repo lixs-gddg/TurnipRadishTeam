@@ -11,7 +11,13 @@ double cal_angle(double a,double b){
 }
 
 double cal_direction(Interactor::Coord a,Interactor::Coord b){
-    return atan((b.y-a.y)/(b.x-a.x));
+    double ans=atan((b.y-a.y)/(b.x-a.x));
+    if(b.x>a.x){
+        return ans;
+    }else{
+        if(ans>0) return ans-M_PI;
+        return ans+M_PI;
+    }
 }
 
 int judge_rotation_direction(double cur,double tar){
