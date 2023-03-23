@@ -1,6 +1,7 @@
 #include <iostream>
 #include <fstream>
 #include "interact.h"
+#include "tactics.h"
 
 bool readUntilOK() {
     char line[1024];
@@ -17,8 +18,20 @@ int main() {
     readUntilOK();
     puts("OK");
     fflush(stdout);
-    
+    bool flag=true;
+    int plannum=0;
+    std::vector<int> goalidx;
     while(Interactor::readFrame()){
+        if(flag)
+        {
+            plannum=global_plan_Select();
+            goalidx=global_path_find(plannum);
+            for(int i=0;i<goalidx.size();i++)
+            {
+                fprintf(stderr,"index:%d type:%d\n",goalidx[i],Interactor::wrkplc[goalidx[i]].type);
+            }
+            flag=false;
+        }
         printf("%d\n", Interactor::curFrame);
         int lineSpeed = 3;
         double angleSpeed = 1.5;
