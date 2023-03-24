@@ -61,18 +61,29 @@ void Interactor::Robot::buy(){
         return;
     }
     printf("buy %d\n",this->id);
-    if(Interactor::wrkplc[curWrkplcId].orderList.size()<=0) 
-    {
-        targetWrkplcId =-2;
-        return;
-    }
+    // if(Interactor::wrkplc[curWrkplcId].orderList.size()<=0) 
+    // {
+    //     targetWrkplcId =-2;
+    //     return;
+    // }
     Interactor::wrkplc[curWrkplcId].isGlobalOrder=false;
+    if(Interactor::wrkplc[targetWrkplcId].MaterialEmpty().size()==0)
+        Interactor::wrkplc[curWrkplcId].isOrder=false;
     targetWrkplcId = Interactor::wrkplc[curWrkplcId].orderList.front().toidx;
     Interactor::wrkplc[curWrkplcId].orderList.pop_front();
 }
 
 void Interactor::Robot::sell(){
     printf("sell %d\n",this->id);
+    Interactor::wrkplc[targetWrkplcId].rawMaterial|=(1<<carriedGoodsType);
+    fprintf(stderr,"remain material num:%ld\n",
+        Interactor::wrkplc[targetWrkplcId].MaterialEmpty().size());
+    if(Interactor::wrkplc[targetWrkplcId].MaterialEmpty().size()==0 && Interactor::wrkplc[targetWrkplcId].prodState==0){
+        Interactor::wrkplc[curWrkplcId].isOrder=false;
+        Interactor::wrkplc[curWrkplcId].rawMaterial=0;
+        // fprintf(stderr,"wrokplace id:%d type:%d can give order again!yyyyyyeeeeaaaahhhhh!!!\n\n",
+        // targetWrkplcId,Interactor::wrkplc[targetWrkplcId].type);
+    }
     targetWrkplcId = -2;
 }
 

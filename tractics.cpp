@@ -46,13 +46,13 @@ bool global_init()
 double priorty_cal(double distance,int size)
 {
     //0.1 means weight.
-    //fprintf(stderr,"test2\n");
+    // fprintf(stderr,"test2\n");
     return 0.1*distance+size;
 }
 
 int find_useable_wrkplc(int center,int goal_type)
 {
-    //fprintf(stderr,"test3\n");
+    fprintf(stderr,"test3\n");
     if(wrkplcidx[goal_type].size()==0) return -2;
     int result=wrkplcidx[goal_type][0];
     double min_priorty=priorty_cal(wrkplc_distance[center][result],Interactor::wrkplc[result].orderList.size());
@@ -71,7 +71,7 @@ int find_useable_wrkplc(int center,int goal_type)
 
 int find_sell_wrkplc(int center)
 {
-    //fprintf(stderr,"test4\n");
+    fprintf(stderr,"test4\n");
     if(wrkplcidx[8].size()+wrkplcidx[9].size()==0) return -2;
     int result;
     if(wrkplcidx[8].size()>0) result=wrkplcidx[8][0];
@@ -95,21 +95,24 @@ int find_sell_wrkplc(int center)
 
 void check_robot()
 {
-    //fprintf(stderr,"test5\n");
+    fprintf(stderr,"test5\n");
     for(int i=0;i<4;i++)
     {
         if(Interactor::rbt[i].curWrkplcId==Interactor::rbt[i].targetWrkplcId && Interactor::rbt[i].targetWrkplcId>=0)
         {
             if(Interactor::rbt[i].carriedGoodsType==0)
             {
-                if(Interactor::wrkplc[Interactor::rbt[i].curWrkplcId].prodState==1)
+                if(Interactor::wrkplc[Interactor::rbt[i].curWrkplcId].prodState==1){
                     Interactor::rbt[i].buy();
+                }
+                    
                 else
                     Interactor::rbt[i].targetWrkplcId=-2;
             }
             else
             {
                 Interactor::rbt[i].sell();
+                
             }
         }
     }
@@ -117,46 +120,43 @@ void check_robot()
 
 void check_wrkplc()
 {
-    //fprintf(stderr,"test6\n");
+    fprintf(stderr,"test6\n");
     std::vector<int> Material_type;
     for(int i=7;i>3;i--)
     {
         for(int j=0;j<wrkplcidx[i].size();j++)
         {
-            if(Interactor::wrkplc[wrkplcidx[i][j]].prodState==1)
+            if(i<7&&Interactor::wrkplc[wrkplcidx[i][j]].orderList.size()>0 && Interactor::wrkplc[wrkplcidx[i][j]].prodState==1 && Interactor::wrkplc[wrkplcidx[i][j]].isGlobalOrder==false)
             {
-                Interactor::wrkplc[wrkplcidx[i][j]].isOrder=false;
-            }
-            if(Interactor::wrkplc[wrkplcidx[i][j]].orderList.size()>0 && Interactor::wrkplc[wrkplcidx[i][j]].prodState==1 && Interactor::wrkplc[wrkplcidx[i][j]].isGlobalOrder==false)
-            {
-                if(i<7)
+                std::list<order>::iterator it = global_list.begin();
+                while(it!=global_list.end())
                 {
-                    std::list<order>::iterator it = global_list.begin();
-                    while(it!=global_list.end())
-                    {
-                        if(Interactor::wrkplc[it->fromidx].type < Interactor::wrkplc[wrkplcidx[i][j]].type) break;
-                        it++;
-                    }
-                    if(it!=global_list.end()) it=global_list.insert(it,Interactor::wrkplc[wrkplcidx[i][j]].orderList.front());
-                    else global_list.push_back(Interactor::wrkplc[wrkplcidx[i][j]].orderList.front());
-                    fprintf(stderr,"add an order %d -> %d\n",
-                    Interactor::wrkplc[wrkplcidx[i][j]].orderList.front().fromidx,
-                    Interactor::wrkplc[wrkplcidx[i][j]].orderList.front().toidx);
+                    if(Interactor::wrkplc[it->fromidx].type < Interactor::wrkplc[wrkplcidx[i][j]].type) break;
+                    it++;
                 }
-                else
-                {
-                    order ins;
-                    ins.fromidx=wrkplcidx[i][j];
-                    ins.toidx=find_sell_wrkplc(ins.fromidx);
-                    global_list.push_front(ins);
-                    fprintf(stderr,"add an order %d -> %d\n",
-                    ins.fromidx,
-                    ins.toidx);
-                }
+                if(it!=global_list.end()) it=global_list.insert(it,Interactor::wrkplc[wrkplcidx[i][j]].orderList.front());
+                else global_list.push_back(Interactor::wrkplc[wrkplcidx[i][j]].orderList.front());
+                fprintf(stderr,"add an order %d -> %d type %d -> %d\n",
+                Interactor::wrkplc[wrkplcidx[i][j]].orderList.front().fromidx,
+                Interactor::wrkplc[wrkplcidx[i][j]].orderList.front().toidx,
+                Interactor::wrkplc[Interactor::wrkplc[wrkplcidx[i][j]].orderList.front().fromidx].type,
+                Interactor::wrkplc[Interactor::wrkplc[wrkplcidx[i][j]].orderList.front().toidx].type);
                 Interactor::wrkplc[wrkplcidx[i][j]].isGlobalOrder=true; 
+            }else if(i==7 && Interactor::wrkplc[wrkplcidx[i][j]].prodState==1 && Interactor::wrkplc[wrkplcidx[i][j]].isGlobalOrder==false){
+                order ins;
+                ins.fromidx=wrkplcidx[i][j];
+                ins.toidx=find_sell_wrkplc(ins.fromidx);
+                Interactor::wrkplc[wrkplcidx[i][j]].addOrder(ins);
+                global_list.push_front(ins);
+                fprintf(stderr,"add an order %d -> %d type %d -> %d\n",
+                ins.fromidx,ins.toidx,Interactor::wrkplc[ins.fromidx].type,Interactor::wrkplc[ins.toidx].type);
+                Interactor::wrkplc[wrkplcidx[i][j]].isGlobalOrder=true;
             }
             if(Interactor::wrkplc[wrkplcidx[i][j]].isOrder==true) continue;
+
             Material_type=Interactor::wrkplc[wrkplcidx[i][j]].MaterialEmpty();
+            fprintf(stderr,"workplace id:%d type:%d is giving order\n",
+            wrkplcidx[i][j],Interactor::wrkplc[wrkplcidx[i][j]].type);
             for(int k=0;k<Material_type.size();k++)
             {
                 int target_idx=find_useable_wrkplc(wrkplcidx[i][j],Material_type[k]);
@@ -164,6 +164,8 @@ void check_wrkplc()
                 temp.fromidx=target_idx;
                 temp.toidx=wrkplcidx[i][j];
                 Interactor::wrkplc[target_idx].addOrder(temp);
+                // fprintf(stderr,"workplace id:%d type:%d add an order to %d type:%d\n",
+                // target_idx,Material_type[k],wrkplcidx[i][j],Interactor::wrkplc[wrkplcidx[i][j]].type);
             }
             Interactor::wrkplc[wrkplcidx[i][j]].isOrder=true;
         }
@@ -203,7 +205,7 @@ void check_wrkplc()
 
 void call_robot()
 {
-    //fprintf(stderr,"test7\n");
+    fprintf(stderr,"test7\n");
     if(global_list.size()==0) return;
     for(int i=0;i<4;i++)
     {
@@ -240,7 +242,7 @@ void do_tactics()
     check_robot();
     check_wrkplc();
     call_robot();
-    //fprintf(stderr,"test8\n");
+    fprintf(stderr,"test8\n");
     for(int i=0;i<4;i++)
     {
         goingto(Interactor::rbt[i].id,Interactor::rbt[i].targetWrkplcId);
