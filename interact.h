@@ -75,8 +75,10 @@ public:
         // product state in 0 or 1
         int prodState;
 
+        // true means this workplace has send order to other workplace
         bool isOrder = false;
 
+        // true means this workplace has send order global_list
         bool isGlobalOrder =false;
 
         std::list<order> orderList;

@@ -2,37 +2,48 @@
 #define __tactics_H__
 
 // #include"interact.h"
-#include<limits.h>
-#include<cmath>
-#include<algorithm>
-#include<iostream>
-#include<list>
+#include <limits.h>
+#include <cmath>
+#include <algorithm>
+#include <iostream>
+#include <list>
 
-typedef struct order_t{
+#define W1 0.1
+#define W2 1
+
+typedef struct order_t
+{
     int fromidx;
     int toidx;
-}order;
+} order;
 
-bool global_init();
+// init the wrkplcidx and wrkplc_distance
+void global_init();
 
-double priorty_cal(double distance,int size);
-
-int find_useable_wrkplc(int center,int goal_type);
-
-int find_sell_wrkplc(int center);
-
-// check if robots are able to do buy or sell;
-void check_robot();
-
-// check if workplaces are able to provide goods and send the order to global list; 
+// check the status of the wrkplc and decision
 void check_wrkplc();
 
-// call available robots to take orders from global_list;
-void call_robot();
+// check the status of the robort and decision
+void check_robort();
 
-// tactics
-void  do_tactics();
+// call robort to take global_order
+void call_robort();
 
-void sprintorder();
+// find the highest priorty wrkplc;
+int find_usable_wrkplc(int centeridx, int goal_type);
+
+// find 8 or 9 type wrkplc to sell
+int find_sell_wrkplc(int centeridx, int goal_type);
+
+// calculate the priority of the wrkplc
+double cal_priority(int distance, int size);
+
+// add order to wrkplc
+bool add_order_wrkplc(int centeridx);
+
+// add order to global_list
+bool add_order_global_list(int centeridx);
+
+void do_tactics();
 
 #endif

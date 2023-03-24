@@ -30,7 +30,8 @@ int main() {
         // }
         if(flag)
         {
-            flag=!global_init();
+            global_init();
+            flag=false;
         }
         do_tactics();
         //sprintorder();

@@ -66,11 +66,18 @@ void Interactor::Robot::buy(){
     //     targetWrkplcId =-2;
     //     return;
     // }
+    fprintf(stderr,"test10\n");
     Interactor::wrkplc[curWrkplcId].isGlobalOrder=false;
+    Interactor::wrkplc[curWrkplcId].prodState=0;
+    fprintf(stderr,"test11\n");
     if(Interactor::wrkplc[targetWrkplcId].MaterialEmpty().size()==0)
         Interactor::wrkplc[curWrkplcId].isOrder=false;
+    fprintf(stderr,"test12\n");
     targetWrkplcId = Interactor::wrkplc[curWrkplcId].orderList.front().toidx;
+    fprintf(stderr,"test13\n");
+    fprintf(stderr,"%d %ld\n",curWrkplcId,Interactor::wrkplc[curWrkplcId].orderList.size());
     Interactor::wrkplc[curWrkplcId].orderList.pop_front();
+    fprintf(stderr,"test14\n");
 }
 
 void Interactor::Robot::sell(){
