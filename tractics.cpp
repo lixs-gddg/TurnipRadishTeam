@@ -8,6 +8,7 @@ std::vector<std::vector<double>> wrkplc_distance;
 std::list<order> global_list;
 bool global_init()
 {
+    //fprintf(stderr,"test1\n");
     wrkplcidx.resize(10);
     wrkplc_distance.resize(Interactor::curWrkplcNum,std::vector<double> (Interactor::curWrkplcNum));
     for(int i=0;i<Interactor::curWrkplcNum;i++)
@@ -45,11 +46,13 @@ bool global_init()
 double priorty_cal(double distance,int size)
 {
     //0.1 means weight.
+    //fprintf(stderr,"test2\n");
     return 0.1*distance+size;
 }
 
 int find_useable_wrkplc(int center,int goal_type)
 {
+    //fprintf(stderr,"test3\n");
     if(wrkplcidx[goal_type].size()==0) return -2;
     int result=wrkplcidx[goal_type][0];
     double min_priorty=priorty_cal(wrkplc_distance[center][result],Interactor::wrkplc[result].orderList.size());
@@ -68,6 +71,7 @@ int find_useable_wrkplc(int center,int goal_type)
 
 int find_sell_wrkplc(int center)
 {
+    //fprintf(stderr,"test4\n");
     if(wrkplcidx[8].size()+wrkplcidx[9].size()==0) return -2;
     int result;
     if(wrkplcidx[8].size()>0) result=wrkplcidx[8][0];
@@ -91,13 +95,17 @@ int find_sell_wrkplc(int center)
 
 void check_robot()
 {
+    //fprintf(stderr,"test5\n");
     for(int i=0;i<4;i++)
     {
         if(Interactor::rbt[i].curWrkplcId==Interactor::rbt[i].targetWrkplcId && Interactor::rbt[i].targetWrkplcId>=0)
         {
             if(Interactor::rbt[i].carriedGoodsType==0)
             {
-                Interactor::rbt[i].buy();
+                if(Interactor::wrkplc[Interactor::rbt[i].curWrkplcId].prodState==1)
+                    Interactor::rbt[i].buy();
+                else
+                    Interactor::rbt[i].targetWrkplcId=-2;
             }
             else
             {
@@ -109,6 +117,7 @@ void check_robot()
 
 void check_wrkplc()
 {
+    //fprintf(stderr,"test6\n");
     std::vector<int> Material_type;
     for(int i=7;i>3;i--)
     {
@@ -167,24 +176,25 @@ void check_wrkplc()
             }
         }
     }
-    fprintf(stderr,"curFrame:%d\n",Interactor::curFrame);
-    for(int i=0;i<Interactor::curWrkplcNum;i++)
-    {
-        fprintf(stderr,"wrkplc%d size:%ld :",i,Interactor::wrkplc[i].orderList.size());
-        for(auto it=Interactor::wrkplc[i].orderList.begin();it!=Interactor::wrkplc[i].orderList.end();it++)
-        {
-            fprintf(stderr,"%d->%d ",it->fromidx,it->toidx);
-        }
-        fprintf(stderr,"\n");
-    }
+    // fprintf(stderr,"curFrame:%d\n",Interactor::curFrame);
+    // for(int i=0;i<Interactor::curWrkplcNum;i++)
+    // {
+    //     fprintf(stderr,"wrkplc%d size:%ld :",i,Interactor::wrkplc[i].orderList.size());
+    //     for(auto it=Interactor::wrkplc[i].orderList.begin();it!=Interactor::wrkplc[i].orderList.end();it++)
+    //     {
+    //         fprintf(stderr,"%d->%d ",it->fromidx,it->toidx);
+    //     }
+    //     fprintf(stderr,"\n");
+    // }
 }
 
 void call_robot()
 {
+    //fprintf(stderr,"test7\n");
     if(global_list.size()==0) return;
     for(int i=0;i<4;i++)
     {
-        if(Interactor::rbt[i].targetWrkplcId==-2)
+        if(Interactor::rbt[i].targetWrkplcId==-2 && global_list.size()>0)
         {
             bool flag=true;
             std::list<order>::iterator it=global_list.begin();
@@ -209,24 +219,27 @@ void call_robot()
     }
 }
 
-void  do_tactics()
+void do_tactics()
 {
+    
     check_robot();
     check_wrkplc();
     call_robot();
+    //fprintf(stderr,"test8\n");
     for(int i=0;i<4;i++)
     {
         goingto(Interactor::rbt[i].id,Interactor::rbt[i].targetWrkplcId);
-        fprintf(stderr,"robot%d to:%d\n",i,Interactor::rbt[i].targetWrkplcId);
+        //fprintf(stderr,"robot%d to:%d\n",i,Interactor::rbt[i].targetWrkplcId);
     }
+    fprintf(stderr,"curframe:%d global_list size:%ld\n",Interactor::curFrame,global_list.size());
 }
 
-void sprintorder()
-{
-    fprintf(stderr,"global_list size:%ld\n",global_list.size());
-    for(std::list<order>::iterator it=global_list.begin();it!=global_list.end();it++)
-    {
-        fprintf(stderr,"order:%d -> %d type: |%d|-> |%d|\n",it->fromidx,it->toidx,Interactor::wrkplc[it->fromidx].type,Interactor::wrkplc[it->toidx].type);
-    }
-}
+// void sprintorder()
+// {
+//     fprintf(stderr,"global_list size:%ld\n",global_list.size());
+//     for(std::list<order>::iterator it=global_list.begin();it!=global_list.end();it++)
+//     {
+//         fprintf(stderr,"order:%d -> %d type: |%d|-> |%d|\n",it->fromidx,it->toidx,Interactor::wrkplc[it->fromidx].type,Interactor::wrkplc[it->toidx].type);
+//     }
+// }
 

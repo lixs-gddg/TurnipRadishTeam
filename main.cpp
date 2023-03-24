@@ -33,7 +33,7 @@ int main() {
             flag=!global_init();
         }
         do_tactics();
-        sprintorder();
+        //sprintorder();
         printf("OK\n");
         fflush(stdout);
     }
