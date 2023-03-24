@@ -70,8 +70,11 @@ void Interactor::Robot::buy(){
     Interactor::wrkplc[curWrkplcId].isGlobalOrder=false;
     Interactor::wrkplc[curWrkplcId].prodState=0;
     fprintf(stderr,"test11\n");
-    if(Interactor::wrkplc[targetWrkplcId].MaterialEmpty().size()==0)
+    if(Interactor::wrkplc[targetWrkplcId].MaterialEmpty().size()==0){
         Interactor::wrkplc[curWrkplcId].isOrder=false;
+        Interactor::wrkplc[curWrkplcId].rawMaterial=0;
+    }
+        
     fprintf(stderr,"test12\n");
     targetWrkplcId = Interactor::wrkplc[curWrkplcId].orderList.front().toidx;
     fprintf(stderr,"test13\n");
@@ -83,8 +86,8 @@ void Interactor::Robot::buy(){
 void Interactor::Robot::sell(){
     printf("sell %d\n",this->id);
     Interactor::wrkplc[targetWrkplcId].rawMaterial|=(1<<carriedGoodsType);
-    fprintf(stderr,"remain material num:%ld\n",
-        Interactor::wrkplc[targetWrkplcId].MaterialEmpty().size());
+    // fprintf(stderr,"remain material num:%ld\n",
+    //   Interactor::wrkplc[targetWrkplcId].MaterialEmpty().size());
     if(Interactor::wrkplc[targetWrkplcId].MaterialEmpty().size()==0 && Interactor::wrkplc[targetWrkplcId].prodState==0){
         Interactor::wrkplc[curWrkplcId].isOrder=false;
         Interactor::wrkplc[curWrkplcId].rawMaterial=0;
