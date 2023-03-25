@@ -9,7 +9,7 @@ std::list<order> global_list;
 
 void global_init()
 {
-    fprintf(stderr,"test1\n");
+    // fprintf(stderr,"test1\n");
     wrkplcidx.resize(10);
     wrkplc_distance.resize(Interactor::curWrkplcNum,std::vector<double> (Interactor::curWrkplcNum));
     for(int i=0;i<Interactor::curWrkplcNum;i++)
@@ -27,14 +27,21 @@ void global_init()
 
 void check_wrkplc()
 {
-    fprintf(stderr,"test2\n");
+    //fprintf(stderr,"test2\n");
     for(int i=7;i>0;i--)
     {
         for(int j=0;j<wrkplcidx[i].size();j++)
         {
             int curidx=wrkplcidx[i][j];
+            if(Interactor::wrkplc[curidx].remProdFrmNum==1 && Interactor::wrkplc[curidx].MaterialEmpty().size()==0 && 
+            Interactor::wrkplc[curidx].prodState==0){
+                Interactor::wrkplc[curidx].isOrder=false;
+                Interactor::wrkplc[curidx].rawMaterial=0;
+            }
             add_order_wrkplc(curidx);
             add_order_global_list(curidx);
+            
+            fprintf(stderr,"global list size:%ld\n",global_list.size());
         }
     }
     //fprintf(stderr,"wrkplc 8 size:%ld\n",Interactor::wrkplc[8].orderList.size());
@@ -42,7 +49,7 @@ void check_wrkplc()
 
 void check_robort()
 {
-    fprintf(stderr,"test3\n");
+    // fprintf(stderr,"test3\n");
     for(int i=0;i<4;i++)
     {
         if(Interactor::rbt[i].curWrkplcId==Interactor::rbt[i].targetWrkplcId && Interactor::rbt[i].targetWrkplcId>=0)
@@ -50,7 +57,7 @@ void check_robort()
             fprintf(stderr,"target:%d GoodsType:%d\n",Interactor::rbt[i].targetWrkplcId,Interactor::rbt[i].carriedGoodsType);
             if(Interactor::rbt[i].carriedGoodsType==0)
             {
-                if(Interactor::wrkplc[Interactor::rbt[i].curWrkplcId].prodState==1)
+                if(Interactor::wrkplc[Interactor::rbt[i].curWrkplcId].prodState==1 && Interactor::curFrame <8850)
                     Interactor::rbt[i].buy();
                 else
                     Interactor::rbt[i].targetWrkplcId=-2;
@@ -66,7 +73,7 @@ void check_robort()
 
 void call_robort()
 {
-    fprintf(stderr,"test4\n");
+    // fprintf(stderr,"test4\n");
     for(int i=0;i<4;i++)
     {
         if(Interactor::rbt[i].targetWrkplcId==-2 && global_list.size()>0)
@@ -95,7 +102,7 @@ void call_robort()
 
 int find_usable_wrkplc(int centeridx, int goal_type)
 {
-    fprintf(stderr,"test5\n");
+    // fprintf(stderr,"test5\n");
     if(centeridx<0 || centeridx>=Interactor::curWrkplcNum || goal_type <=0 || goal_type >7 || wrkplcidx[goal_type].size()==0) return -2;
     int result=wrkplcidx[goal_type][0];
     int curidx=result;
@@ -117,7 +124,7 @@ int find_usable_wrkplc(int centeridx, int goal_type)
 
 int find_sell_wrkplc(int centeridx, int goal_type)
 {
-    fprintf(stderr,"test6\n");
+    // fprintf(stderr,"test6\n");
     if(wrkplcidx[goal_type].size()==0)
         return -2;
     int result=wrkplcidx[goal_type][0];
@@ -143,10 +150,12 @@ double cal_priority(int distance, int size)
 
 bool add_order_wrkplc(int centeridx)
 {
-    fprintf(stderr,"test7\n");
+    // fprintf(stderr,"test7\n");
     if(centeridx<0 || centeridx>=Interactor::curWrkplcNum) 
         return false;
     if(Interactor::wrkplc[centeridx].isOrder==true) 
+        return false;
+    if(Interactor::wrkplc[centeridx].orderList.size()==0 && Interactor::wrkplc[centeridx].type!=7 && wrkplcidx[7].size()>=2);
         return false;
     if(Interactor::wrkplc[centeridx].type<4 ||Interactor::wrkplc[centeridx].type>7)
         return false;
@@ -167,7 +176,7 @@ bool add_order_wrkplc(int centeridx)
 
 bool add_order_global_list(int centeridx)
 {
-    fprintf(stderr,"test8\n");
+    // fprintf(stderr,"test8\n");
     if(centeridx<0 || centeridx>=Interactor::curWrkplcNum) 
         return false;
     if(Interactor::wrkplc[centeridx].isGlobalOrder==true)
@@ -202,7 +211,7 @@ void do_tactics()
     check_robort();
     check_wrkplc();
     call_robort();
-    fprintf(stderr,"test9\n");
+    // fprintf(stderr,"test9\n");
     for(int i=0;i<4;i++)
     {
         goingto(Interactor::rbt[i].id,Interactor::rbt[i].targetWrkplcId);

@@ -23,7 +23,7 @@ void goingto(int robotId,int workplaceId){
         }else {
             Interactor::rbt[robotId].rotate(rotationDir*PI);
         }
-        if(distance<1.5){
+        if(distance<1){
             Interactor::rbt[robotId].forward(2);
         }else{
             Interactor::rbt[robotId].forward(6);
