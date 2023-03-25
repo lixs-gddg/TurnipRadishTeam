@@ -155,7 +155,7 @@ bool add_order_wrkplc(int centeridx)
         return false;
     if(Interactor::wrkplc[centeridx].isOrder==true) 
         return false;
-    if(Interactor::wrkplc[centeridx].orderList.size()==0 && Interactor::wrkplc[centeridx].type!=7 && wrkplcidx[7].size()>=2);
+    if(Interactor::wrkplc[centeridx].orderList.size()==0 && Interactor::wrkplc[centeridx].type!=7 && wrkplcidx[7].size()>=2)
         return false;
     if(Interactor::wrkplc[centeridx].type<4 ||Interactor::wrkplc[centeridx].type>7)
         return false;
