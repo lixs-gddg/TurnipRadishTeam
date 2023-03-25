@@ -7,9 +7,11 @@
 #include <algorithm>
 #include <iostream>
 #include <list>
+#include <time.h>
 
 #define W1 0.1
 #define W2 1
+#define W3 2
 
 typedef struct order_t
 {
@@ -24,7 +26,7 @@ void global_init();
 void check_wrkplc();
 
 // check the status of the robort and decision
-void check_robort();
+void check_robort(bool flag);
 
 // call robort to take global_order
 void call_robort();
@@ -45,5 +47,9 @@ bool add_order_wrkplc(int centeridx);
 bool add_order_global_list(int centeridx);
 
 void do_tactics();
+
+double cal_robot_priority(double robot_to_distance,double wrkplc_distance,int type);
+
+bool exchange_order(int rbtidx);
 
 #endif

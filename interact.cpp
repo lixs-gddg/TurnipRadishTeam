@@ -64,6 +64,7 @@ void Interactor::Robot::buy(){
         return;
     }
     printf("buy %d\n",this->id);
+    carriedGoodsType=Interactor::wrkplc[curWrkplcId].type;
     //fprintf(stderr,"test10\n");
     Interactor::wrkplc[curWrkplcId].isGlobalOrder=false;
     Interactor::wrkplc[curWrkplcId].prodState=0;
