@@ -13,4 +13,7 @@ double cal_direction(Interactor::Coord a, Interactor::Coord b);
 // cur refer to current direction, tar refer to target direction
 // return true means ccw,flase means cw
 int judge_rotation_direction(double cur,double tar);
+// dir refer to a direction,
+// return the reverse direction
+double reverse_direction(double dir);
 #endif

@@ -25,3 +25,7 @@ int judge_rotation_direction(double cur,double tar){
     tar=tar<0?2*M_PI+tar:tar;
     return cur<tar?1:-1;
 }
+
+double reverse_direction(double dir){
+    return dir>0?dir-M_PI:dir+M_PI;
+}

@@ -7,6 +7,6 @@ const double accerlate_ab=20.1705;
 
 
 void goingto(int robotId,int workplaceId);
-
+void avoid(int robotId1,int robotId2);
 
 #endif
