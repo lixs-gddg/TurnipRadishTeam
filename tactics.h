@@ -9,7 +9,7 @@
 #include <list>
 #include <time.h>
 
-#define W1 1
+#define W1 0.8
 #define W2 1.5
 #define W3 2
 #define W4 1
