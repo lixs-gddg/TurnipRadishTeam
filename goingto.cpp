@@ -14,7 +14,7 @@ void goingto(int robotId,int workplaceId){
     int rotationDir=judge_rotation_direction(Interactor::rbt[robotId].direction,direction);
     if(angle>PI/2){
         Interactor::rbt[robotId].rotate(rotationDir*PI);
-        Interactor::rbt[robotId].forward(-2);
+        Interactor::rbt[robotId].forward(-1);
     }else{
         if(fabs(w)<1e-4&&angle>1e-4){
             Interactor::rbt[robotId].rotate(rotationDir * sqrt(angle*b));
@@ -23,11 +23,9 @@ void goingto(int robotId,int workplaceId){
         }else {
             Interactor::rbt[robotId].rotate(rotationDir*PI);
         }
-        if(distance<1){
-            Interactor::rbt[robotId].forward(2);
-        }else{
-            Interactor::rbt[robotId].forward(6);
-        }
+        if(distance<1)
+            Interactor::rbt[robotId].forward(1);
+        else Interactor::rbt[robotId].forward(6);
     }
     
 }
@@ -36,6 +34,6 @@ void avoid(int id1,int id2){
     double dir=cal_direction(Interactor::rbt[id1].pos,Interactor::rbt[id2].pos);
     double average_dir=cal_average_direction(Interactor::rbt[id1].direction,reverse_direction(Interactor::rbt[id2].direction));
     int rotationDir=judge_rotation_direction(dir,average_dir);
-    Interactor::rbt[id1].rotate(rotationDir*PI);
-    Interactor::rbt[id1].forward(6);
+    Interactor::rbt[id1].rotate(rotationDir*PI/1.25);
+    Interactor::rbt[id1].forward(3);
 }

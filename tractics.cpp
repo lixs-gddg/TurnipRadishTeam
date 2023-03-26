@@ -59,7 +59,9 @@ void check_robort(bool flag)
             fprintf(stderr, "target:%d GoodsType:%d\n", Interactor::rbt[i].targetWrkplcId, Interactor::rbt[i].carriedGoodsType);
             if (Interactor::rbt[i].carriedGoodsType == 0)
             {
-                if (Interactor::wrkplc[Interactor::rbt[i].curWrkplcId].prodState == 1 && flag)
+                if (Interactor::wrkplc[Interactor::rbt[i].curWrkplcId].prodState == 1 && flag &&
+                (9000-Interactor::curFrame)/50>cal_distance(Interactor::wrkplc[Interactor::rbt[i].curWrkplcId].pos,
+                Interactor::wrkplc[Interactor::wrkplc[Interactor::rbt[i].curWrkplcId].orderList.front().toidx].pos)/6+0.7)
                     Interactor::rbt[i].buy();
                 else
                     Interactor::rbt[i].targetWrkplcId = -2;
@@ -206,6 +208,15 @@ bool add_order_global_list(int centeridx)
         Interactor::wrkplc[centeridx].isGlobalOrder = true;
         return true;
     }
+    else if(wrkplcidx[7].size()==0&&Interactor::wrkplc[centeridx].type<7&&Interactor::wrkplc[centeridx].type>3
+    &&wrkplcidx[9].size()>0){
+        order_add.fromidx=centeridx;
+        order_add.toidx=find_sell_wrkplc(centeridx,9);
+        global_list.push_front(order_add);
+        Interactor::wrkplc[centeridx].addOrder(order_add);
+        Interactor::wrkplc[centeridx].isGlobalOrder = true;
+        return true;
+    }
     if (Interactor::wrkplc[centeridx].orderList.size() == 0)
         return false;
     order_add = Interactor::wrkplc[centeridx].orderList.front();
@@ -263,7 +274,7 @@ bool exchange_order(int rbtidx)
     double min_distance=cal_distance(Interactor::rbt[rbtidx].pos,Interactor::wrkplc[Interactor::rbt[rbtidx].targetWrkplcId].pos);
     for(int i=0;i<4;i++)
     {
-        if(rbtidx!=i && Interactor::rbt[i].carriedGoodsType==0 && cal_distance(Interactor::rbt[i].pos,Interactor::wrkplc[Interactor::rbt[i].targetWrkplcId].pos)>10)
+        if(rbtidx!=i && Interactor::rbt[i].carriedGoodsType==0 && cal_distance(Interactor::rbt[i].pos,Interactor::wrkplc[Interactor::rbt[i].targetWrkplcId].pos)>5)
         {
             double cur_distance=cal_distance(Interactor::rbt[i].pos,Interactor::wrkplc[Interactor::rbt[rbtidx].targetWrkplcId].pos);
             if(cur_distance<min_distance)
