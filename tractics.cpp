@@ -7,6 +7,8 @@ std::vector<std::vector<int>> wrkplcidx;
 std::vector<std::vector<double>> wrkplc_distance;
 std::list<order> global_list;
 time_t time_begin;
+int remain_frame[8]={0,5,5,5,50,50,50,100};
+int priority[8]={0,16,15,14,9,8,7,1};
 void global_init()
 {
     time_begin = time(NULL);
@@ -43,7 +45,7 @@ void check_wrkplc()
             add_order_wrkplc(curidx);
             add_order_global_list(curidx);
 
-            fprintf(stderr, "global list size:%ld\n", global_list.size());
+            // fprintf(stderr, "global list size:%ld\n", global_list.size());
         }
     }
     // fprintf(stderr,"wrkplc 8 size:%ld\n",Interactor::wrkplc[8].orderList.size());
@@ -56,7 +58,7 @@ void check_robort(bool flag)
     {
         if (Interactor::rbt[i].curWrkplcId == Interactor::rbt[i].targetWrkplcId && Interactor::rbt[i].targetWrkplcId >= 0)
         {
-            fprintf(stderr, "target:%d GoodsType:%d\n", Interactor::rbt[i].targetWrkplcId, Interactor::rbt[i].carriedGoodsType);
+            // fprintf(stderr, "target:%d GoodsType:%d\n", Interactor::rbt[i].targetWrkplcId, Interactor::rbt[i].carriedGoodsType);
             if (Interactor::rbt[i].carriedGoodsType == 0)
             {
                 if (Interactor::wrkplc[Interactor::rbt[i].curWrkplcId].prodState == 1 && flag &&
@@ -88,10 +90,12 @@ void call_robort()
         {
             auto it = global_list.begin();
             auto temp = it;
-            double min_priority = cal_robot_priority(cal_distance(Interactor::rbt[i].pos,Interactor::wrkplc[it->fromidx].pos),wrkplc_distance[it->fromidx][it->toidx],Interactor::wrkplc[it->fromidx].type);
+            double min_priority = cal_robot_priority(cal_distance(Interactor::rbt[i].pos,Interactor::wrkplc[it->fromidx].pos),wrkplc_distance[it->fromidx][it->toidx],Interactor::wrkplc[it->fromidx].type,
+            cal_angle(Interactor::rbt[i].direction,cal_direction(Interactor::rbt[i].pos,Interactor::wrkplc[it->fromidx].pos)));
             while (it != global_list.end())
             {
-                if (cal_robot_priority(cal_distance(Interactor::rbt[i].pos,Interactor::wrkplc[it->fromidx].pos),wrkplc_distance[it->fromidx][it->toidx],Interactor::wrkplc[it->fromidx].type)<min_priority)
+                if (cal_robot_priority(cal_distance(Interactor::rbt[i].pos,Interactor::wrkplc[it->fromidx].pos),wrkplc_distance[it->fromidx][it->toidx],Interactor::wrkplc[it->fromidx].type,
+                cal_angle(Interactor::rbt[i].direction,cal_direction(Interactor::rbt[i].pos,Interactor::wrkplc[it->fromidx].pos)))<min_priority)
                 {
                     temp = it;
                 }
@@ -178,7 +182,7 @@ bool add_order_wrkplc(int centeridx)
         if (order_add.fromidx < 0 || order_add.fromidx >= Interactor::curWrkplcNum)
             continue;
         Interactor::wrkplc[order_add.fromidx].addOrder(order_add);
-        fprintf(stderr, "wrk:%d order:%d -> %d type %d -> %d\n", order_add.fromidx, order_add.fromidx, order_add.toidx, Interactor::wrkplc[order_add.fromidx].type, Interactor::wrkplc[order_add.toidx].type);
+        // fprintf(stderr, "wrk:%d order:%d -> %d type %d -> %d\n", order_add.fromidx, order_add.fromidx, order_add.toidx, Interactor::wrkplc[order_add.fromidx].type, Interactor::wrkplc[order_add.toidx].type);
     }
     Interactor::wrkplc[centeridx].isOrder = true;
     // fprintf(stderr,"wrkplc 8 size:%ld\n",Interactor::wrkplc[8].orderList.size());
@@ -243,7 +247,7 @@ void do_tactics()
         for(int j = i+1; j < Constant::Robot::RbtNum; j++){
             // will collide ?
             if(Interactor::rbt[i].willCollide(j)){
-                fprintf(stderr,"rbt %d will collide with rbt %d\n",i,j);
+                // fprintf(stderr,"rbt %d will collide with rbt %d\n",i,j);
                 avoid(i,j);
                 flag = true;
             }
@@ -262,9 +266,9 @@ void do_tactics()
     // }
 }
 
-double cal_robot_priority(double robot_to_distance, double wrkplc_distance, int type)
+double cal_robot_priority(double robot_to_distance, double wrkplc_distance, int type,double angle)
 {
-    return W1*wrkplc_distance+W2*(7-type)+W3*robot_to_distance;
+    return W1*wrkplc_distance+priority[type]+W3*robot_to_distance+W4*angle;
 }
 
 bool exchange_order(int rbtidx)

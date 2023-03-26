@@ -14,7 +14,7 @@ void goingto(int robotId,int workplaceId){
     int rotationDir=judge_rotation_direction(Interactor::rbt[robotId].direction,direction);
     if(angle>PI/2){
         Interactor::rbt[robotId].rotate(rotationDir*PI);
-        Interactor::rbt[robotId].forward(-1);
+        Interactor::rbt[robotId].forward(-2);
     }else{
         if(fabs(w)<1e-4&&angle>1e-4){
             Interactor::rbt[robotId].rotate(rotationDir * sqrt(angle*b));
@@ -24,7 +24,12 @@ void goingto(int robotId,int workplaceId){
             Interactor::rbt[robotId].rotate(rotationDir*PI);
         }
         if(distance<1)
-            Interactor::rbt[robotId].forward(1);
+            Interactor::rbt[robotId].forward(2);
+        else if(angle>PI/4){
+            Interactor::rbt[robotId].forward(2);
+            Interactor::rbt[robotId].rotate(rotationDir*PI);
+        }
+            
         else Interactor::rbt[robotId].forward(6);
     }
     

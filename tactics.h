@@ -9,10 +9,10 @@
 #include <list>
 #include <time.h>
 
-#define W1 0.1
-#define W2 1
+#define W1 1
+#define W2 1.5
 #define W3 2
-
+#define W4 1
 typedef struct order_t
 {
     int fromidx;
@@ -48,7 +48,7 @@ bool add_order_global_list(int centeridx);
 
 void do_tactics();
 
-double cal_robot_priority(double robot_to_distance,double wrkplc_distance,int type);
+double cal_robot_priority(double robot_to_distance,double wrkplc_distance,int type,double angle);
 
 bool exchange_order(int rbtidx);
 

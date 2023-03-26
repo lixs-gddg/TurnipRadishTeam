@@ -42,23 +42,23 @@ bool Interactor::readFrame(){
 
 
 void Interactor::Robot::forward(double v){
-    if(v < Constant::Robot::MinForwardVelocity ||
-        v > Constant::Robot::MaxForwardVelocity)
-        fprintf(stderr,"speed out of range: line speed = %lf\n",v);
+    // if(v < Constant::Robot::MinForwardVelocity ||
+    //     v > Constant::Robot::MaxForwardVelocity)
+        // fprintf(stderr,"speed out of range: line speed = %lf\n",v);
     printf("forward %d %lf\n",this->id,v);
 }
 
 // angular velocity
 void Interactor::Robot::rotate(double av){
-    if(av < Constant::Robot::MinAngularVelocity ||
-        av > Constant::Robot::MaxAngularVelocity)
-        fprintf(stderr,"angular speed out of range: angular speed = %lf\n",av);
+    // if(av < Constant::Robot::MinAngularVelocity ||
+    //     av > Constant::Robot::MaxAngularVelocity)
+        // fprintf(stderr,"angular speed out of range: angular speed = %lf\n",av);
     printf("rotate %d %lf\n",this->id,av);
 }
 
 void Interactor::Robot::buy(){
     if(curWrkplcId == -1){
-        fprintf(stderr,"robot %d is not in any workplace\n",id);
+        // fprintf(stderr,"robot %d is not in any workplace\n",id);
         return;
     }
     if(Interactor::wrkplc[curWrkplcId].prodState==0){
@@ -66,7 +66,7 @@ void Interactor::Robot::buy(){
     }
     printf("buy %d\n",this->id);
     carriedGoodsType=Interactor::wrkplc[curWrkplcId].type;
-    //fprintf(stderr,"test10\n");
+    // fprintf(stderr,"test10\n");
     Interactor::wrkplc[curWrkplcId].isGlobalOrder=false;
     Interactor::wrkplc[curWrkplcId].prodState=0;
     //fprintf(stderr,"test11\n");
@@ -74,12 +74,12 @@ void Interactor::Robot::buy(){
         Interactor::wrkplc[curWrkplcId].isOrder=false;
     }
         
-    //fprintf(stderr,"test12\n");
+    // fprintf(stderr,"test12\n");
     targetWrkplcId = Interactor::wrkplc[curWrkplcId].orderList.front().toidx;
-    //fprintf(stderr,"test13\n");
-    fprintf(stderr,"%d %ld\n",curWrkplcId,Interactor::wrkplc[curWrkplcId].orderList.size());
+    // fprintf(stderr,"test13\n");
+    // fprintf(stderr,"%d %ld\n",curWrkplcId,Interactor::wrkplc[curWrkplcId].orderList.size());
     Interactor::wrkplc[curWrkplcId].orderList.pop_front();
-    //fprintf(stderr,"test14\n");
+    // fprintf(stderr,"test14\n");
 }
 
 void Interactor::Robot::sell(){
