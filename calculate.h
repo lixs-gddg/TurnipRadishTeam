@@ -16,4 +16,10 @@ int judge_rotation_direction(double cur,double tar);
 // dir refer to a direction,
 // return the reverse direction
 double reverse_direction(double dir);
+
+
+bool is_in_motion_path(Interactor::Coord p,Interactor::Coord a,Interactor::Coord b
+    ,std::vector<double>& alnv,std::vector<double>& blnv);
+Interactor::Coord cal_all_intersection_point(Interactor::Coord a,Interactor::Coord b,std::vector<double>& alnv,std::vector<double>& blnv);
+
 #endif

@@ -19,6 +19,7 @@ public:
         static constexpr double MinForwardVelocity = -2;
         static constexpr double MaxAngularVelocity = M_PI;
         static constexpr double MinAngularVelocity = -M_PI;
+        static constexpr double RbtRadius = 0.53;
     };
 
     class Workplace{

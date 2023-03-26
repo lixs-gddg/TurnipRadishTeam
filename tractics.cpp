@@ -69,6 +69,18 @@ void check_robort(bool flag)
                 Interactor::rbt[i].sell();
             }
         }
+
+        
+    }
+
+    // avoid to collide
+    for(int i = 0; i < Constant::Robot::RbtNum-1; i++){
+        for(int j = i+1; j < Constant::Robot::RbtNum; j++){
+            // will collide ?
+            if(Interactor::rbt[i].willCollide(j)){
+                avoid(i,j);
+            }
+        }
     }
     // fprintf(stderr,"wrkplc 8 size:%ld\n",Interactor::wrkplc[8].orderList.size());
 }

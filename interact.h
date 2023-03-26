@@ -15,7 +15,7 @@ public:
     class Coord{
     public:
         Coord(){}
-        Coord(double x,double y);
+        Coord(double _x,double _y):x(_x),y(_y){}
 
         double x,y;
     };
@@ -38,6 +38,8 @@ public:
         void sell();
 
         void destroy();
+
+        bool willCollide(int rbtid);
     // private:
         // robot id
         int id;
