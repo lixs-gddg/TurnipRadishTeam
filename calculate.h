@@ -17,9 +17,7 @@ int judge_rotation_direction(double cur,double tar);
 // return the reverse direction
 double reverse_direction(double dir);
 
+double cal_average_direction(double a,double b);
 
-bool is_in_motion_path(Interactor::Coord p,Interactor::Coord a,Interactor::Coord b
-    ,std::vector<double>& alnv,std::vector<double>& blnv);
-Interactor::Coord cal_all_intersection_point(Interactor::Coord a,Interactor::Coord b,std::vector<double>& alnv,std::vector<double>& blnv);
-
+bool is_collide_in_motion_path(Interactor::Coord ap,Interactor::Coord bp,std::vector<double>& alnv,std::vector<double>& blnv);
 #endif

@@ -73,15 +73,7 @@ void check_robort(bool flag)
         
     }
 
-    // avoid to collide
-    for(int i = 0; i < Constant::Robot::RbtNum-1; i++){
-        for(int j = i+1; j < Constant::Robot::RbtNum; j++){
-            // will collide ?
-            if(Interactor::rbt[i].willCollide(j)){
-                avoid(i,j);
-            }
-        }
-    }
+    
     // fprintf(stderr,"wrkplc 8 size:%ld\n",Interactor::wrkplc[8].orderList.size());
 }
 
@@ -235,6 +227,18 @@ void do_tactics()
     // fprintf(stderr,"test9\n");
     for (int i = 0; i < 4; i++)
     {
+        bool flag = false;
+        // avoid to collide
+        for(int j = i+1; j < Constant::Robot::RbtNum; j++){
+            // will collide ?
+            if(Interactor::rbt[i].willCollide(j)){
+                fprintf(stderr,"rbt %d will collide with rbt %d\n",i,j);
+                avoid(i,j);
+                flag = true;
+            }
+        
+        }
+        if(flag) continue;
         goingto(Interactor::rbt[i].id, Interactor::rbt[i].targetWrkplcId);
         // fprintf(stderr,"wrkplc 8 size:%ld\n",Interactor::wrkplc[8].orderList.size());
     }

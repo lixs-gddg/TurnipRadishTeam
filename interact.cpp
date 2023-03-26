@@ -103,13 +103,13 @@ bool Interactor::Robot::willCollide(int rbtid)
     if(rbtid < 0 || rbtid >= Constant::Robot::RbtNum)
         return false;
     double dis = cal_distance(pos,Interactor::rbt[rbtid].pos);
-    if(dis > Constant::Robot::RbtRadius * 4)
+    if(dis > Constant::Robot::RbtRadius * 10)
         return false;
     if(lnVelocity[0] == 0 && Interactor::rbt[rbtid].lnVelocity[0] == 0)
         return false;
-    Interactor::Coord p = cal_all_intersection_point(pos,Interactor::rbt[rbtid].pos,lnVelocity,Interactor::rbt[rbtid].lnVelocity);
-    return is_in_motion_path(p,pos,Interactor::rbt[rbtid].pos,lnVelocity,Interactor::rbt[rbtid].lnVelocity);
-}
+    
+    return is_collide_in_motion_path(pos,Interactor::rbt[rbtid].pos,lnVelocity,Interactor::rbt[rbtid].lnVelocity);
+} 
 
 void Interactor::Workplace::addOrder(const order& o){
     orderList.push_back(o);

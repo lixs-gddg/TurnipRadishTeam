@@ -34,7 +34,7 @@ void goingto(int robotId,int workplaceId){
 
 void avoid(int id1,int id2){
     double dir=cal_direction(Interactor::rbt[id1].pos,Interactor::rbt[id2].pos);
-    double average_dir=(Interactor::rbt[id1].direction+reverse_direction(Interactor::rbt[id2].direction))/2;
+    double average_dir=cal_average_direction(Interactor::rbt[id1].direction,reverse_direction(Interactor::rbt[id2].direction));
     int rotationDir=judge_rotation_direction(dir,average_dir);
     Interactor::rbt[id1].rotate(rotationDir*PI);
     Interactor::rbt[id1].forward(3);
